@@ -25,7 +25,7 @@ public class Cars {
     	 * The content:// style URL for this table 
     	 */
     	public static final Uri CONTENT_URI = 
-        	Uri.parse("content://" + AUTHORITY + "/calls");
+        	Uri.parse("content://" + AUTHORITY + "/cars");
         
     	public static final String CONTENT_TYPE = "";	//TODO
 

@@ -1,5 +1,6 @@
 package net.insomniasoftware.mycar.provider;
 
+import net.insomniasoftware.mycar.R;
 import net.insomniasoftware.mycar.provider.Cars.CarsColumns;
 import android.content.ContentValues;
 import android.content.Context;
@@ -50,6 +51,7 @@ public class CarsDatabaseHelper extends SQLiteOpenHelper {
 	private void createDefaultProfile(SQLiteDatabase db){
 		ContentValues values = new ContentValues();
 		values.put(CarsColumns.NAME, "My Car");
+		values.put(CarsColumns.RESOURCE, R.drawable.car);
 		db.insertOrThrow(CARS_TABLE, null, values);
 		
 		Log.d(TAG, "Default car profile");

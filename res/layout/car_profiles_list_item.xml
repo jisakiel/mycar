@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="1dip"
+    android:paddingBottom="1dip"
+    android:paddingLeft="6dip"
+    android:paddingRight="6dip">
+
+	<TextView android:id="@+id/profile_name"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:textAppearance="?android:attr/textAppearanceLarge"
+	    android:gravity="center_vertical"
+	    android:paddingLeft="6dip"
+	    android:minHeight="?android:attr/listPreferredItemHeight"
+	/>
+	
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal"
+    	android:layout_gravity="center_vertical"
+    	android:gravity="right">
+    	
+	    <ImageView android:id="@+id/car_icon"
+	        android:layout_width="32dip"
+	        android:layout_height="32dip"
+		    android:paddingLeft="4dip"
+		    android:paddingRight="4dip"/>
+	        
+	    <ImageView android:id="@+id/arrow_icon"
+	        android:src="@drawable/arrow"
+	        android:layout_width="32dip"
+	        android:layout_height="32dip"
+		    android:paddingLeft="4dip"
+		    android:paddingRight="4dip"/>
+	        
+	    <ImageView android:id="@+id/park_icon"
+	        android:src="@drawable/park"
+	        android:layout_width="32dip"
+	        android:layout_height="32dip"
+		    android:paddingLeft="4dip"
+		    android:paddingRight="4dip"/>
+	        
+	</LinearLayout>
+</LinearLayout>
