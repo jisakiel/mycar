@@ -48,27 +48,30 @@ public class CarProfilesListActivity extends ListActivity {
 			
 			int carIcon = cursor.getInt(cursor.getColumnIndex(CarsColumns.RESOURCE));
 			mCarIcon.setImageDrawable(getResources().getDrawable(carIcon));
-			mCarIcon.setOnClickListener(new OnClickListener() {
-				
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Toast.makeText(mContext, "Go to car position of " + mId, Toast.LENGTH_LONG).show();
-				}
-			});
+			
+			
+			//setup click listeners for specific actions
+
+			
+//			//if the whole listview takes you to the car this should be redundant. 
+//
+//			mCarIcon.setOnClickListener(new OnClickListener() {
+//				public void onClick(View v) {
+//					showCar(mId);
+//				}
+//			});
+			
+
 			
 			mArrowIcon.setOnClickListener(new OnClickListener() {
-				
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Toast.makeText(mContext, "Directions to car of " + mId, Toast.LENGTH_LONG).show();
+					navigate(mId);
 				}
 			});
 			
 			mParkIcon.setOnClickListener(new OnClickListener() {
-				
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Toast.makeText(mContext, "Park car " + mId, Toast.LENGTH_LONG).show();
+					park(mId);
 				}
 			});
 			
@@ -100,11 +103,25 @@ public class CarProfilesListActivity extends ListActivity {
     }
 
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-		
-		Toast.makeText(mContext, "MAIN ITEM: Go to car position of " + id, Toast.LENGTH_LONG).show();
+	protected void onListItemClick(ListView l, View v, int position, long mId) {
+		super.onListItemClick(l, v, position, mId);
+		showCar(mId);
 	}
     
+	
+	//FIXME just foolin' here
+	private void park(long mId) {
+		Toast.makeText(mContext, getString(R.string.park) + mId, Toast.LENGTH_LONG).show();
+	}
+	
+	private void navigate(long mId) {
+		Toast.makeText(mContext, getString(R.string.arrow) + mId, Toast.LENGTH_LONG).show();
+	}
     
+	private void showCar(long mId) {
+		Toast.makeText(mContext, getString(R.string.car) + mId, Toast.LENGTH_LONG).show();
+	}
+	private void removeCar(long mId) {
+		Toast.makeText(mContext, getString(R.string.remove) + mId, Toast.LENGTH_LONG).show();
+	}
 }
