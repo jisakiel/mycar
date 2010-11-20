@@ -22,7 +22,7 @@ public class CarProfilesListActivity extends ListActivity {
 	private CarProfilesListAdapter mAdapter;
 	
 	/** Adapter class to fill in data for the car profiles data */
-    final class CarProfilesListAdapter extends ResourceCursorAdapter {
+    final class CarProfilesListAdapter extends ResourceCursorAdapter { //@masterj why final?
     	
     	int mId;
     	TextView mNameTextView;
@@ -31,7 +31,7 @@ public class CarProfilesListActivity extends ListActivity {
     	ImageView mParkIcon;
 
 		public CarProfilesListAdapter(Cursor c) {
-			super(CarProfilesListActivity.this, R.layout.car_profiles_list_item, c);
+			super(CarProfilesListActivity.this, R.layout.car_profiles_list_item, c); //@masterj shouldn't autorequery be 1?
 		}
 
 		@Override
