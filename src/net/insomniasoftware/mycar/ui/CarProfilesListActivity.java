@@ -8,8 +8,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ResourceCursorAdapter;
@@ -91,9 +98,54 @@ public class CarProfilesListActivity extends ListActivity {
         
         mAdapter = new CarProfilesListAdapter(c);
         setListAdapter(mAdapter);
+        
+		//long click listener for the whole view
+		registerForContextMenu(this.getListView());
+		
+		getListView().setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView parent, View v, int position, long mId) {
+				showCar(mId);
+			}
+		});
     }
+
+    
+    
+    //context menu
     
     @Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.car_menu, menu);
+	}
+    
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+    	AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+    	switch (item.getItemId()) {
+	    	case R.id.park: 
+	    		park(info.id);
+	    		return true;
+	    	case R.id.arrow:
+	    		navigate(info.id);
+	    		return true;
+	    	case R.id.car:
+	    		showCar(info.id);
+	    		return true;
+	    	case R.id.remove:
+	    		removeCar(info.id);
+	    		return true;
+	    		
+	    	default:
+	    		return super.onContextItemSelected(item);
+	    }
+    }
+    
+
+	@Override
     protected void onDestroy() {
         super.onDestroy();
         Cursor cursor = mAdapter.getCursor();
