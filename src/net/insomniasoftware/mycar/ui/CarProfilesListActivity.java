@@ -25,7 +25,7 @@ public class CarProfilesListActivity extends ListActivity {
     final class CarProfilesListAdapter extends ResourceCursorAdapter {
     	
     	int mId;
-    	TextView mName;
+    	TextView mNameTextView;
     	ImageView mCarIcon;
     	ImageView mArrowIcon;
     	ImageView mParkIcon;
@@ -38,12 +38,13 @@ public class CarProfilesListActivity extends ListActivity {
 		public void bindView(View v, Context context, Cursor cursor) {
 			
 			mId = cursor.getInt(cursor.getColumnIndex(CarsColumns._ID));
-			mName = (TextView) v.findViewById(R.id.profile_name);
-			mCarIcon = (ImageView) v.findViewById(R.id.car_icon);
-			mArrowIcon = (ImageView) v.findViewById(R.id.arrow_icon);
-			mParkIcon = (ImageView) v.findViewById(R.id.park_icon);
+			mNameTextView = (TextView) v.findViewById(R.id.profile_name);
+			mCarIcon = (ImageView) v.findViewById(R.id.car);
+			mArrowIcon = (ImageView) v.findViewById(R.id.arrow);
+			mParkIcon = (ImageView) v.findViewById(R.id.park);
 			
-			mName.setText(cursor.getString(cursor.getColumnIndex(CarsColumns.NAME)));
+			//fill up data from database
+			mNameTextView.setText(cursor.getString(cursor.getColumnIndex(CarsColumns.NAME))); //@masterj shouldn't we be using getColumnIndexOrThrow? 
 			
 			int carIcon = cursor.getInt(cursor.getColumnIndex(CarsColumns.RESOURCE));
 			mCarIcon.setImageDrawable(getResources().getDrawable(carIcon));

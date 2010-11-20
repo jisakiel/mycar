@@ -14,7 +14,7 @@
       android:layout_gravity="center_vertical"
       android:gravity="right">
       
-      <ImageView android:id="@+id/car_icon"
+      <ImageView android:id="@+id/car"
         android:layout_width="32dip"
         android:layout_height="32dip"
         android:paddingLeft="4dip"
@@ -40,14 +40,14 @@
     	android:gravity="right">
     	
         
-	    <ImageView android:id="@+id/arrow_icon"
+	    <ImageView android:id="@+id/arrow"
 	        android:src="@drawable/arrow"
 	        android:layout_width="32dip"
 	        android:layout_height="32dip"
 		    android:paddingLeft="4dip"
 		    android:paddingRight="4dip"/>
 	        
-	    <ImageView android:id="@+id/park_icon"
+	    <ImageView android:id="@+id/park"
 	        android:src="@drawable/park"
 	        android:layout_width="32dip"
 	        android:layout_height="32dip"
