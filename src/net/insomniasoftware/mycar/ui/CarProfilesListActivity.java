@@ -8,8 +8,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ResourceCursorAdapter;
@@ -22,52 +29,56 @@ public class CarProfilesListActivity extends ListActivity {
 	private CarProfilesListAdapter mAdapter;
 	
 	/** Adapter class to fill in data for the car profiles data */
-    final class CarProfilesListAdapter extends ResourceCursorAdapter {
+    final class CarProfilesListAdapter extends ResourceCursorAdapter { //@masterj why final?
     	
     	int mId;
-    	TextView mName;
+    	TextView mNameTextView;
     	ImageView mCarIcon;
     	ImageView mArrowIcon;
     	ImageView mParkIcon;
 
 		public CarProfilesListAdapter(Cursor c) {
-			super(CarProfilesListActivity.this, R.layout.car_profiles_list_item, c);
+			super(CarProfilesListActivity.this, R.layout.car_profiles_list_item, c); //@masterj shouldn't autorequery be 1?
 		}
 
 		@Override
 		public void bindView(View v, Context context, Cursor cursor) {
 			
 			mId = cursor.getInt(cursor.getColumnIndex(CarsColumns._ID));
-			mName = (TextView) v.findViewById(R.id.profile_name);
-			mCarIcon = (ImageView) v.findViewById(R.id.car_icon);
-			mArrowIcon = (ImageView) v.findViewById(R.id.arrow_icon);
-			mParkIcon = (ImageView) v.findViewById(R.id.park_icon);
+			mNameTextView = (TextView) v.findViewById(R.id.profile_name);
+			mCarIcon = (ImageView) v.findViewById(R.id.car);
+			mArrowIcon = (ImageView) v.findViewById(R.id.arrow);
+			mParkIcon = (ImageView) v.findViewById(R.id.park);
 			
-			mName.setText(cursor.getString(cursor.getColumnIndex(CarsColumns.NAME)));
+			//fill up data from database
+			mNameTextView.setText(cursor.getString(cursor.getColumnIndex(CarsColumns.NAME))); //@masterj shouldn't we be using getColumnIndexOrThrow? 
 			
 			int carIcon = cursor.getInt(cursor.getColumnIndex(CarsColumns.RESOURCE));
 			mCarIcon.setImageDrawable(getResources().getDrawable(carIcon));
-			mCarIcon.setOnClickListener(new OnClickListener() {
-				
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Toast.makeText(mContext, "Go to car position of " + mId, Toast.LENGTH_LONG).show();
-				}
-			});
+			
+			
+			//setup click listeners for specific actions
+
+			
+//			//if the whole listview takes you to the car this should be redundant. 
+//
+//			mCarIcon.setOnClickListener(new OnClickListener() {
+//				public void onClick(View v) {
+//					showCar(mId);
+//				}
+//			});
+			
+
 			
 			mArrowIcon.setOnClickListener(new OnClickListener() {
-				
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Toast.makeText(mContext, "Directions to car of " + mId, Toast.LENGTH_LONG).show();
+					navigate(mId);
 				}
 			});
 			
 			mParkIcon.setOnClickListener(new OnClickListener() {
-				
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Toast.makeText(mContext, "Park car " + mId, Toast.LENGTH_LONG).show();
+					park(mId);
 				}
 			});
 			
@@ -87,9 +98,54 @@ public class CarProfilesListActivity extends ListActivity {
         
         mAdapter = new CarProfilesListAdapter(c);
         setListAdapter(mAdapter);
+        
+		//long click listener for the whole view
+		registerForContextMenu(this.getListView());
+		
+		getListView().setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView parent, View v, int position, long mId) {
+				showCar(mId);
+			}
+		});
     }
+
+    
+    
+    //context menu
     
     @Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.car_menu, menu);
+	}
+    
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+    	AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+    	switch (item.getItemId()) {
+	    	case R.id.park: 
+	    		park(info.id);
+	    		return true;
+	    	case R.id.arrow:
+	    		navigate(info.id);
+	    		return true;
+	    	case R.id.car:
+	    		showCar(info.id);
+	    		return true;
+	    	case R.id.remove:
+	    		removeCar(info.id);
+	    		return true;
+	    		
+	    	default:
+	    		return super.onContextItemSelected(item);
+	    }
+    }
+    
+
+	@Override
     protected void onDestroy() {
         super.onDestroy();
         Cursor cursor = mAdapter.getCursor();
@@ -99,11 +155,25 @@ public class CarProfilesListActivity extends ListActivity {
     }
 
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-		
-		Toast.makeText(mContext, "MAIN ITEM: Go to car position of " + id, Toast.LENGTH_LONG).show();
+	protected void onListItemClick(ListView l, View v, int position, long mId) {
+		super.onListItemClick(l, v, position, mId);
+		showCar(mId);
 	}
     
+	
+	//FIXME just foolin' here
+	private void park(long mId) {
+		Toast.makeText(mContext, getString(R.string.park) + mId, Toast.LENGTH_LONG).show();
+	}
+	
+	private void navigate(long mId) {
+		Toast.makeText(mContext, getString(R.string.arrow) + mId, Toast.LENGTH_LONG).show();
+	}
     
+	private void showCar(long mId) {
+		Toast.makeText(mContext, getString(R.string.car) + mId, Toast.LENGTH_LONG).show();
+	}
+	private void removeCar(long mId) {
+		Toast.makeText(mContext, getString(R.string.remove) + mId, Toast.LENGTH_LONG).show();
+	}
 }

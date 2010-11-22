@@ -2,4 +2,8 @@
 <resources>
     <string name="hello">Hello World, MainActivity!</string>
     <string name="app_name">Dude, where\'s my car?</string>
+<string name="car">Show the car</string>
+<string name="arrow">Take me to my car</string>
+<string name="remove">Delete this car</string>
+<string name="park">Park my car here</string>
 </resources>
