@@ -15,7 +15,7 @@ public class CarsDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "cars.db";
     
-    public static final String CARS_TABLE = "cars";
+    public static final String CARS_TABLE = Cars.TABLE_NAME;
     
 	public CarsDatabaseHelper(Context context){
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -48,6 +48,7 @@ public class CarsDatabaseHelper extends SQLiteOpenHelper {
 		}
 	}
 	
+	//TODO DEBUG
 	private void createDefaultProfile(SQLiteDatabase db){
 		ContentValues values = new ContentValues();
 		values.put(CarsColumns.NAME, "My Car");

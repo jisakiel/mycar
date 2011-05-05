@@ -14,9 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ResourceCursorAdapter;
@@ -58,18 +56,6 @@ public class CarProfilesListActivity extends ListActivity {
 			
 			
 			//setup click listeners for specific actions
-
-			
-//			//if the whole listview takes you to the car this should be redundant. 
-//
-//			mCarIcon.setOnClickListener(new OnClickListener() {
-//				public void onClick(View v) {
-//					showCar(mId);
-//				}
-//			});
-			
-
-			
 			mArrowIcon.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					navigate(mId);
@@ -102,12 +88,6 @@ public class CarProfilesListActivity extends ListActivity {
 		//long click listener for the whole view
 		registerForContextMenu(this.getListView());
 		
-		getListView().setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView parent, View v, int position, long mId) {
-				showCar(mId);
-			}
-		});
     }
 
     

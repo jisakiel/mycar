@@ -14,6 +14,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 
 public class CarsProvider extends ContentProvider {
@@ -73,15 +74,15 @@ public class CarsProvider extends ContentProvider {
         int match = sURIMatcher.match(uri);
         switch (match) {
             case CARS: {
-                qb.setTables("cars");
+                qb.setTables(Cars.TABLE_NAME);
                 qb.setProjectionMap(sCarsProjectionMap);
                 break;
             }
 
             case CARS_ID: {
-                qb.setTables("cars");
+                qb.setTables(Cars.TABLE_NAME);
                 qb.setProjectionMap(sCarsProjectionMap);
-                qb.appendWhere("cars._id=");
+                qb.appendWhere(Cars.TABLE_NAME + CarsColumns._ID + "=");
                 qb.appendWhere(uri.getPathSegments().get(1));
                 break;
             }
@@ -93,10 +94,9 @@ public class CarsProvider extends ContentProvider {
         final SQLiteDatabase db = sDbHelper.getReadableDatabase();
         Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder, null);
         
-        //TODO notify
-        //if (c != null) {
-        //    c.setNotificationUri(getContext().getContentResolver(), CarsColumns.CONTENT_URI);
-        //}
+        if (c != null) {
+            c.setNotificationUri(getContext().getContentResolver(), CarsColumns.CONTENT_URI);
+        }
         return c;
 	}
 	
@@ -104,8 +104,7 @@ public class CarsProvider extends ContentProvider {
 	public Uri insert(Uri uri, ContentValues values) {
 		long rowId = mCarsInserter.insert(values);
         if (rowId > 0) {
-            //TODO notify
-        	//notifyChange();
+        	notifyChange();
             return ContentUris.withAppendedId(uri, rowId);
         }
         return null;
@@ -114,14 +113,52 @@ public class CarsProvider extends ContentProvider {
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
+		final SQLiteDatabase db = sDbHelper.getWritableDatabase();
+        String where;
+        final int match = sURIMatcher.match(uri);
+        
+        switch (match) {
+        case CARS: {
+        	where = selection;
+            break;
+        }
+
+        case CARS_ID: {
+        	String whereId = CarsColumns._ID + "=" + uri.getPathSegments().get(1);
+        	if (TextUtils.isEmpty(selection))
+        		where = whereId;
+        	else where = "(" + selection + ") AND (" + whereId + ")";
+            break;
+        }
+        
+        default:
+            throw new IllegalArgumentException("Unknown URL " + uri);
+    }
+        int count = db.update(Cars.TABLE_NAME, values, where, selectionArgs);
+    	notifyChange();
+        return count;
 	}
 	
 	@Override
-	public int delete(Uri arg0, String arg1, String[] arg2) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int delete(Uri uri, String selection, String[] selectionArgs) {
+		final SQLiteDatabase db = sDbHelper.getWritableDatabase();
+		String where;
+		final int match = sURIMatcher.match(uri);
+		switch (match) {
+			case CARS:
+				where = selection;
+				break;
+				
+			case CARS_ID:
+				where = CarsColumns._ID + "=" + uri.getPathSegments().get(1);
+				break;
+				
+            default:
+                throw new IllegalArgumentException("Unknown URL " + uri);
+        }
+		int count = db.delete(Cars.TABLE_NAME, where, selectionArgs);
+		notifyChange();
+		return count;
 	}
 	
 	@Override
@@ -136,5 +173,10 @@ public class CarsProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 	}
+	
+    protected void notifyChange() {
+        getContext().getContentResolver().notifyChange(Cars.CONTENT_URI, null,
+                false /* wake up sync adapters */);
+    }
 
 }

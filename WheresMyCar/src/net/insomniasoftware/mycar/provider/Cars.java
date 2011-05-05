@@ -9,6 +9,8 @@ import android.provider.BaseColumns;
 public class Cars {
 
 	public static final String AUTHORITY = "net.insomniasoftware.mycar";
+	
+	public static final String TABLE_NAME = "cars";
 
     /**
      * The content:// style URL for this provider
@@ -25,11 +27,11 @@ public class Cars {
     	 * The content:// style URL for this table 
     	 */
     	public static final Uri CONTENT_URI = 
-        	Uri.parse("content://" + AUTHORITY + "/cars");
+        	Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
         
-    	public static final String CONTENT_TYPE = "";	//TODO
+    	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.insomniasoftware.cars";	
 
-    	public static final String CONTENT_ITEM_TYPE = ""; //TODO
+    	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.insomniasoftware.cars"; 
     	
     	/**
     	 * The name of the car profile.
