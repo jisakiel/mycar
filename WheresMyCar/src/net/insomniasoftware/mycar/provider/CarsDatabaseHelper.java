@@ -1,8 +1,6 @@
 package net.insomniasoftware.mycar.provider;
 
-import net.insomniasoftware.mycar.R;
-import net.insomniasoftware.mycar.provider.Cars.CarsColumns;
-import android.content.ContentValues;
+import net.insomniasoftware.mycar.provider.CarsInfo.Cars;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -11,11 +9,13 @@ import android.util.Log;
 public class CarsDatabaseHelper extends SQLiteOpenHelper {
 
 	private static final String TAG = "CarsDatabaseHelper";
-	private static final int DATABASE_VERSION = 1;
+	
+	private static final int DATABASE_VERSION = 2;
+		// V2: Latitude and longitude are REALs. Name not null.
 
     private static final String DATABASE_NAME = "cars.db";
     
-    public static final String CARS_TABLE = Cars.TABLE_NAME;
+    public static final String CARS_TABLE = CarsProvider.TABLE_NAME;
     
 	public CarsDatabaseHelper(Context context){
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -25,17 +25,16 @@ public class CarsDatabaseHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		
 		db.execSQL("CREATE TABLE " + CARS_TABLE + " (" +
-				CarsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-				CarsColumns.NAME + " TEXT, " +
-				CarsColumns.LATITUDE + " INTEGER, " +
-				CarsColumns.LONGITUDE + " INTEGER, " +
-				CarsColumns.ACCURACY + " REAL, " +
-				CarsColumns.DATE + " INTEGER, " +
-				CarsColumns.RESOURCE + " INTEGER, " +
-				CarsColumns.MAC_ADDRESS + " TEXT" +
+				Cars._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+				Cars.NAME + " TEXT NOT NULL, " +
+				Cars.LATITUDE + " REAL, " +
+				Cars.LONGITUDE + " REAL, " +
+				Cars.ACCURACY + " REAL, " +
+				Cars.DATE + " INTEGER, " +
+				Cars.RESOURCE + " INTEGER, " +
+				Cars.MAC_ADDRESS + " TEXT" +
 			");");
 		
-		createDefaultProfile(db);
 	}
 
 	@Override
@@ -46,16 +45,6 @@ public class CarsDatabaseHelper extends SQLiteOpenHelper {
 			db.execSQL("DROP TABLE IF EXISTS " + CARS_TABLE + ";");
 			onCreate(db);
 		}
-	}
-	
-	//TODO DEBUG
-	private void createDefaultProfile(SQLiteDatabase db){
-		ContentValues values = new ContentValues();
-		values.put(CarsColumns.NAME, "My Car");
-		values.put(CarsColumns.RESOURCE, R.drawable.car);
-		db.insertOrThrow(CARS_TABLE, null, values);
-		
-		Log.d(TAG, "Default car profile");
 	}
 
 }

@@ -2,7 +2,7 @@ package net.insomniasoftware.mycar.provider;
 
 import java.util.HashMap;
 
-import net.insomniasoftware.mycar.provider.Cars.CarsColumns;
+import net.insomniasoftware.mycar.provider.CarsInfo.Cars;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -21,13 +21,15 @@ public class CarsProvider extends ContentProvider {
 	
 	private static final String TAG = "CarsProvider";
 	
+	public static final String TABLE_NAME = "cars";
+	
 	private static final int CARS = 1;
     private static final int CARS_ID = 2;
 
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static {
-        sURIMatcher.addURI(Cars.AUTHORITY, "cars", CARS);
-        sURIMatcher.addURI(Cars.AUTHORITY, "cars/#", CARS_ID);
+        sURIMatcher.addURI(CarsInfo.AUTHORITY, "cars", CARS);
+        sURIMatcher.addURI(CarsInfo.AUTHORITY, "cars/#", CARS_ID);
     }
     
     private static final HashMap<String, String> sCarsProjectionMap;
@@ -35,14 +37,14 @@ public class CarsProvider extends ContentProvider {
 
         // Cars projection map
         sCarsProjectionMap = new HashMap<String, String>();
-        sCarsProjectionMap.put(CarsColumns._ID, CarsColumns._ID);
-        sCarsProjectionMap.put(CarsColumns.NAME, CarsColumns.NAME);
-        sCarsProjectionMap.put(CarsColumns.LATITUDE, CarsColumns.LATITUDE);
-        sCarsProjectionMap.put(CarsColumns.LONGITUDE, CarsColumns.LONGITUDE);
-        sCarsProjectionMap.put(CarsColumns.ACCURACY, CarsColumns.ACCURACY);
-        sCarsProjectionMap.put(CarsColumns.DATE, CarsColumns.DATE);
-        sCarsProjectionMap.put(CarsColumns.RESOURCE, CarsColumns.RESOURCE);
-        sCarsProjectionMap.put(CarsColumns.MAC_ADDRESS, CarsColumns.MAC_ADDRESS);
+        sCarsProjectionMap.put(Cars._ID, Cars._ID);
+        sCarsProjectionMap.put(Cars.NAME, Cars.NAME);
+        sCarsProjectionMap.put(Cars.LATITUDE, Cars.LATITUDE);
+        sCarsProjectionMap.put(Cars.LONGITUDE, Cars.LONGITUDE);
+        sCarsProjectionMap.put(Cars.ACCURACY, Cars.ACCURACY);
+        sCarsProjectionMap.put(Cars.DATE, Cars.DATE);
+        sCarsProjectionMap.put(Cars.RESOURCE, Cars.RESOURCE);
+        sCarsProjectionMap.put(Cars.MAC_ADDRESS, Cars.MAC_ADDRESS);
     }
 
     private static CarsDatabaseHelper sDbHelper;
@@ -74,15 +76,15 @@ public class CarsProvider extends ContentProvider {
         int match = sURIMatcher.match(uri);
         switch (match) {
             case CARS: {
-                qb.setTables(Cars.TABLE_NAME);
+                qb.setTables(TABLE_NAME);
                 qb.setProjectionMap(sCarsProjectionMap);
                 break;
             }
 
             case CARS_ID: {
-                qb.setTables(Cars.TABLE_NAME);
+                qb.setTables(TABLE_NAME);
                 qb.setProjectionMap(sCarsProjectionMap);
-                qb.appendWhere(Cars.TABLE_NAME + CarsColumns._ID + "=");
+                qb.appendWhere(TABLE_NAME + "." + Cars._ID + "=");
                 qb.appendWhere(uri.getPathSegments().get(1));
                 break;
             }
@@ -95,7 +97,7 @@ public class CarsProvider extends ContentProvider {
         Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder, null);
         
         if (c != null) {
-            c.setNotificationUri(getContext().getContentResolver(), CarsColumns.CONTENT_URI);
+            c.setNotificationUri(getContext().getContentResolver(), CarsInfo.CONTENT_URI);
         }
         return c;
 	}
@@ -124,7 +126,7 @@ public class CarsProvider extends ContentProvider {
         }
 
         case CARS_ID: {
-        	String whereId = CarsColumns._ID + "=" + uri.getPathSegments().get(1);
+        	String whereId = Cars._ID + "=" + uri.getPathSegments().get(1);
         	if (TextUtils.isEmpty(selection))
         		where = whereId;
         	else where = "(" + selection + ") AND (" + whereId + ")";
@@ -134,7 +136,7 @@ public class CarsProvider extends ContentProvider {
         default:
             throw new IllegalArgumentException("Unknown URL " + uri);
     }
-        int count = db.update(Cars.TABLE_NAME, values, where, selectionArgs);
+        int count = db.update(TABLE_NAME, values, where, selectionArgs);
     	notifyChange();
         return count;
 	}
@@ -150,13 +152,13 @@ public class CarsProvider extends ContentProvider {
 				break;
 				
 			case CARS_ID:
-				where = CarsColumns._ID + "=" + uri.getPathSegments().get(1);
+				where = TABLE_NAME + "." + Cars._ID + "=" + uri.getPathSegments().get(1);
 				break;
 				
             default:
                 throw new IllegalArgumentException("Unknown URL " + uri);
         }
-		int count = db.delete(Cars.TABLE_NAME, where, selectionArgs);
+		int count = db.delete(TABLE_NAME, where, selectionArgs);
 		notifyChange();
 		return count;
 	}
@@ -166,16 +168,16 @@ public class CarsProvider extends ContentProvider {
         int match = sURIMatcher.match(uri);
         switch (match) {
             case CARS:
-                return CarsColumns.CONTENT_TYPE;
+                return Cars.CONTENT_TYPE;
             case CARS_ID:
-                return CarsColumns.CONTENT_ITEM_TYPE;
+                return Cars.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 	}
 	
     protected void notifyChange() {
-        getContext().getContentResolver().notifyChange(Cars.CONTENT_URI, null,
+        getContext().getContentResolver().notifyChange(CarsInfo.CONTENT_URI, null,
                 false /* wake up sync adapters */);
     }
 

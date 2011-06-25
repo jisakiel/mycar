@@ -6,12 +6,10 @@ import android.provider.BaseColumns;
 /**
  * The Cars provider contains information about car profiles and its know positions.
  */
-public class Cars {
+public class CarsInfo {
 
 	public static final String AUTHORITY = "net.insomniasoftware.mycar";
 	
-	public static final String TABLE_NAME = "cars";
-
     /**
      * The content:// style URL for this provider
      */
@@ -21,13 +19,13 @@ public class Cars {
     /**
      * Contains the car profiles info.
      */
-    public static class CarsColumns implements BaseColumns {
-
-    	/**
-    	 * The content:// style URL for this table 
-    	 */
-    	public static final Uri CONTENT_URI = 
-        	Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
+    public static class Cars implements BaseColumns {
+    	
+        /**
+         * The content:// style URL for this provider
+         */
+        public static final Uri CONTENT_URI =
+            Uri.parse("content://" + AUTHORITY + "/cars");
         
     	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.insomniasoftware.cars";	
 

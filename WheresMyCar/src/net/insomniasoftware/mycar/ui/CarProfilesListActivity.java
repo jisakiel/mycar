@@ -1,9 +1,9 @@
 package net.insomniasoftware.mycar.ui;
 
 import net.insomniasoftware.mycar.R;
-import net.insomniasoftware.mycar.provider.Cars;
-import net.insomniasoftware.mycar.provider.Cars.CarsColumns;
+import net.insomniasoftware.mycar.provider.CarsInfo.Cars;
 import android.app.ListActivity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -42,16 +42,16 @@ public class CarProfilesListActivity extends ListActivity {
 		@Override
 		public void bindView(View v, Context context, Cursor cursor) {
 			
-			mId = cursor.getInt(cursor.getColumnIndex(CarsColumns._ID));
+			mId = cursor.getInt(cursor.getColumnIndex(Cars._ID));
 			mNameTextView = (TextView) v.findViewById(R.id.profile_name);
 			mCarIcon = (ImageView) v.findViewById(R.id.car);
 			mArrowIcon = (ImageView) v.findViewById(R.id.arrow);
 			mParkIcon = (ImageView) v.findViewById(R.id.park);
 			
 			//fill up data from database
-			mNameTextView.setText(cursor.getString(cursor.getColumnIndex(CarsColumns.NAME))); //@masterj shouldn't we be using getColumnIndexOrThrow? 
+			mNameTextView.setText(cursor.getString(cursor.getColumnIndex(Cars.NAME))); //@masterj shouldn't we be using getColumnIndexOrThrow? 
 			
-			int carIcon = cursor.getInt(cursor.getColumnIndex(CarsColumns.RESOURCE));
+			int carIcon = cursor.getInt(cursor.getColumnIndex(Cars.RESOURCE));
 			mCarIcon.setImageDrawable(getResources().getDrawable(carIcon));
 			
 			
@@ -78,8 +78,17 @@ public class CarProfilesListActivity extends ListActivity {
         
         mContext = getApplicationContext();
         
-        Uri uri = Uri.withAppendedPath(Cars.CONTENT_URI, "cars");
-        Cursor c = getContentResolver().query(uri, 
+		ContentValues values = new ContentValues();
+		values.put(Cars.NAME, "My Car");
+		values.put(Cars.RESOURCE, R.drawable.car);
+		getContentResolver().insert(Cars.CONTENT_URI, values);
+		
+		values.clear();
+		values.put(Cars.NAME, "My Car2");
+		values.put(Cars.RESOURCE, R.drawable.car);
+		getContentResolver().insert(Cars.CONTENT_URI, values);
+        
+        Cursor c = getContentResolver().query(Cars.CONTENT_URI, 
         		null, null, null, null);
         
         mAdapter = new CarProfilesListAdapter(c);
@@ -104,6 +113,7 @@ public class CarProfilesListActivity extends ListActivity {
     
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+    	//TODO continue here
     	AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
     	switch (item.getItemId()) {
 	    	case R.id.park: 
@@ -142,18 +152,22 @@ public class CarProfilesListActivity extends ListActivity {
     
 	
 	//FIXME just foolin' here
-	private void park(long mId) {
-		Toast.makeText(mContext, getString(R.string.park) + mId, Toast.LENGTH_LONG).show();
+	private void park(long id) {
+		Toast.makeText(mContext, getString(R.string.park) + id, Toast.LENGTH_LONG).show();
 	}
 	
-	private void navigate(long mId) {
-		Toast.makeText(mContext, getString(R.string.arrow) + mId, Toast.LENGTH_LONG).show();
+	private void navigate(long id) {
+		Toast.makeText(mContext, getString(R.string.arrow) + id, Toast.LENGTH_LONG).show();
 	}
     
-	private void showCar(long mId) {
-		Toast.makeText(mContext, getString(R.string.car) + mId, Toast.LENGTH_LONG).show();
+	private void showCar(long id) {
+		Toast.makeText(mContext, getString(R.string.car) + id, Toast.LENGTH_LONG).show();
 	}
-	private void removeCar(long mId) {
-		Toast.makeText(mContext, getString(R.string.remove) + mId, Toast.LENGTH_LONG).show();
+	private void removeCar(long id) {
+		int count = getContentResolver().delete(Uri.withAppendedPath(Cars.CONTENT_URI, String.valueOf(id)), null, null);
+
+		if (count == 1)
+			Toast.makeText(mContext, getString(R.string.remove) + id, Toast.LENGTH_LONG).show();
+		
 	}
 }
