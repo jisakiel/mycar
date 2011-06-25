@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, MainActivity!</string>
+    
+    <!--  Application strings -->
     <string name="app_name">Dude, where\'s my car?</string>
-<string name="car">Show the car</string>
-<string name="arrow">Take me to my car</string>
-<string name="remove">Delete this car</string>
-<string name="park">Park my car here</string>
+    
+    <!-- Generic strings -->
+    <string name="distance">Distance:</string>
+    <string name="unknown">unknown</string>
+    
+    <!--  Cars list options menu strings -->
+	<string name="new_profile">Create new car profile</string>
+	<string name="map_view">Map view</string>
+	
+    <!--  Car context menu strings -->
+	<string name="show_car">Show in map</string>
+	<string name="directions">Take me to my car</string>
+	<string name="park">Park my car here</string>
+	<string name="edit_profile">Edit info</string>
+	<string name="remove">Delete profile</string>
 </resources>
