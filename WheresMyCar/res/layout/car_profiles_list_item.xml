@@ -5,32 +5,48 @@
     android:paddingTop="1dip"
     android:paddingBottom="1dip"
     android:paddingLeft="6dip"
-    android:paddingRight="6dip">
+    android:paddingRight="6dip"
+	android:minHeight="?android:attr/listPreferredItemHeight" >
 
-  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:layout_gravity="center_vertical"
-      android:gravity="right">
-      
-      <ImageView android:id="@+id/car"
-        android:layout_width="32dip"
-        android:layout_height="32dip"
-        android:paddingLeft="4dip"
-        android:paddingRight="4dip"/>
-  
-  </LinearLayout>
+  	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="wrap_content"
+  		android:layout_height="wrap_content"
+  		android:orientation="horizontal"
+  		android:layout_gravity="center_vertical"
+  		android:gravity="right">
+  		
+  		<ImageView android:id="@+id/car"
+        	android:layout_width="32dip"
+        	android:layout_height="32dip"
+        	android:paddingLeft="4dip"
+        	android:paddingRight="4dip"/>
 
-	<TextView android:id="@+id/profile_name"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:textAppearance="?android:attr/textAppearanceLarge"
-	    android:gravity="center_vertical"
-	    android:paddingLeft="6dip"
-	    android:minHeight="?android:attr/listPreferredItemHeight"
-	    android:layout_weight="1"
-	android:text="My car placeholder"/>
+	</LinearLayout>
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="wrap_content"
+  		android:layout_height="wrap_content"
+  		android:orientation="vertical"
+  		android:layout_gravity="center_vertical"
+    	android:layout_weight="1">
+	
+		<TextView android:id="@+id/profile_name"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textAppearance="?android:attr/textAppearanceMedium"
+		    android:gravity="center_vertical"
+		    android:paddingLeft="6dip"/>
+		    
+		    
+		<TextView android:id="@+id/distance"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textAppearance="?android:attr/textAppearanceSmall"
+		    android:gravity="center_vertical"
+		    android:paddingLeft="6dip"
+		    android:text="Distance: 900m"/>
+	 
+	</LinearLayout>
 	
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     	android:layout_width="wrap_content"

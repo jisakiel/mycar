@@ -3,6 +3,8 @@ package net.insomniasoftware.mycar.provider;
 import java.util.HashMap;
 
 import net.insomniasoftware.mycar.provider.CarsInfo.Cars;
+import net.insomniasoftware.mycar.provider.CarsInfo.Cars.RESOURCE_TYPE;
+import net.insomniasoftware.mycar.util.Utils;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -43,7 +45,8 @@ public class CarsProvider extends ContentProvider {
         sCarsProjectionMap.put(Cars.LONGITUDE, Cars.LONGITUDE);
         sCarsProjectionMap.put(Cars.ACCURACY, Cars.ACCURACY);
         sCarsProjectionMap.put(Cars.DATE, Cars.DATE);
-        sCarsProjectionMap.put(Cars.RESOURCE, Cars.RESOURCE);
+        sCarsProjectionMap.put(Cars.RESOURCE_URL, Cars.RESOURCE_URL);
+        sCarsProjectionMap.put(Cars.RESOURCE_TYPE, Cars.RESOURCE_TYPE);
         sCarsProjectionMap.put(Cars.MAC_ADDRESS, Cars.MAC_ADDRESS);
     }
 
@@ -104,6 +107,24 @@ public class CarsProvider extends ContentProvider {
 	
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
+		
+		// Name (mandatory)
+		if (!values.containsKey(Cars.NAME) || Utils.isEmpty(values.getAsString(Cars.NAME)))
+			throw new IllegalArgumentException("Car profile must have a name");
+		
+		// Resource_type (default value)
+		if (!values.containsKey(Cars.RESOURCE_TYPE) || Utils.isEmpty(values.getAsString(Cars.RESOURCE_TYPE))){
+			//Default value
+			values.put(Cars.RESOURCE_TYPE, RESOURCE_TYPE.CARS_ICON.ordinal());
+			Log.i(TAG, "Resource_type missed: inserting car profile with default icon");
+		}
+		
+		// if resource_type is personal_icon assert resource_url exists 
+		if (values.getAsInteger(Cars.RESOURCE_TYPE) == RESOURCE_TYPE.PERSONAL_ICON.ordinal()){
+			if (!values.containsKey(Cars.RESOURCE_URL) || Utils.isEmpty(values.getAsString(Cars.RESOURCE_URL)))
+				throw new IllegalArgumentException("A RESOURCE_URL is needed with RESOURCE_TYPE.PERSONAL_INFO");
+		}
+		
 		long rowId = mCarsInserter.insert(values);
         if (rowId > 0) {
         	notifyChange();

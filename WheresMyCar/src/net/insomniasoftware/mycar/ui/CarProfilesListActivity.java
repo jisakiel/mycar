@@ -1,10 +1,12 @@
 package net.insomniasoftware.mycar.ui;
 
+import java.io.IOException;
+
 import net.insomniasoftware.mycar.R;
 import net.insomniasoftware.mycar.provider.CarsInfo.Cars;
 import android.app.ListActivity;
-import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,9 +26,10 @@ import android.widget.Toast;
 
 public class CarProfilesListActivity extends ListActivity {
 
-	private Context mContext;
 	private CarProfilesListAdapter mAdapter;
-
+	
+	private static final int SUBACTIVITY_NEW_CAR = 1;
+	
 	/** Adapter class to fill in data for the car profiles data */
 	final class CarProfilesListAdapter extends ResourceCursorAdapter {
 
@@ -52,7 +55,7 @@ public class CarProfilesListActivity extends ListActivity {
 			//fill up data from database
 			mNameTextView.setText(cursor.getString(cursor.getColumnIndexOrThrow(Cars.NAME)));
 
-			int carIcon = cursor.getInt(cursor.getColumnIndexOrThrow(Cars.RESOURCE));
+			int carIcon = cursor.getInt(cursor.getColumnIndexOrThrow(Cars.RESOURCE_URL));
 			mCarIcon.setImageDrawable(getResources().getDrawable(carIcon));
 
 
@@ -76,9 +79,8 @@ public class CarProfilesListActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		mContext = getApplicationContext();
-
+		
+		/*
 		//FIXME DEBUG DATA -- delete
 		ContentValues values = new ContentValues();
 		values.put(Cars.NAME, "My Car");
@@ -90,6 +92,7 @@ public class CarProfilesListActivity extends ListActivity {
 		values.put(Cars.RESOURCE, R.drawable.car);
 		getContentResolver().insert(Cars.CONTENT_URI, values);
 		//END DEBUG DATA
+		*/
 
 		Cursor c = getContentResolver().query(Cars.CONTENT_URI, 
 				null, null, null, null);
@@ -117,7 +120,7 @@ public class CarProfilesListActivity extends ListActivity {
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.car_context_menu, menu);
+		inflater.inflate(R.menu.cars_list_context_menu, menu);
 	}
 
 	@Override
@@ -135,7 +138,9 @@ public class CarProfilesListActivity extends ListActivity {
 			showCar(info.id);
 			return true;
 		case R.id.edit_profile:
-			
+			return true;
+		case R.id.share_location:
+			shareLocation(info.id);
 			return true;
 		case R.id.remove:
 			getContentResolver().delete(Uri.withAppendedPath(Cars.CONTENT_URI, String.valueOf(info.id)), null, null);
@@ -146,13 +151,12 @@ public class CarProfilesListActivity extends ListActivity {
 		}
 	}
 
-
 	//Options menu
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.carslist_options_menu, menu);
+		inflater.inflate(R.menu.cars_list_options_menu, menu);
 		return true;
 	}
 
@@ -160,34 +164,49 @@ public class CarProfilesListActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.new_profile:
-			Toast.makeText(this, "New car profile activity", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(this, "New car profile activity", Toast.LENGTH_SHORT).show();
+			Intent i = new Intent(this, EditCarActivity.class);
+			startActivityForResult(i, SUBACTIVITY_NEW_CAR);
 			return true;
 		case R.id.map_view:
+			//TODO
 			Toast.makeText(this, "Map view", Toast.LENGTH_SHORT).show();
 			return true;
+		case R.id.delete_all:
+			getContentResolver().delete(Cars.CONTENT_URI, null, null);
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long mId) {
-		super.onListItemClick(l, v, position, mId);
-		showCar(mId);
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		showCar(id);
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		Toast.makeText(this, "Request code " + requestCode, Toast.LENGTH_SHORT).show();
+	}
 
 	//FIXME just foolin' here
 	private void park(long id) {
-		Toast.makeText(mContext, getString(R.string.park) + id, Toast.LENGTH_LONG).show();
+		Toast.makeText(CarProfilesListActivity.this, getString(R.string.park) + id, Toast.LENGTH_LONG).show();
 	}
 
 	private void navigate(long id) {
-		Toast.makeText(mContext, getString(R.string.directions) + id, Toast.LENGTH_LONG).show();
+		Toast.makeText(CarProfilesListActivity.this, getString(R.string.directions) + id, Toast.LENGTH_LONG).show();
 	}
 
 	private void showCar(long id) {
-		Toast.makeText(mContext, getString(R.string.show_car) + id, Toast.LENGTH_LONG).show();
+		Toast.makeText(CarProfilesListActivity.this, getString(R.string.show_car) + id, Toast.LENGTH_LONG).show();
+	}
+	
+	private void shareLocation(long id) {
+		Toast.makeText(CarProfilesListActivity.this, getString(R.string.share_location) + id, Toast.LENGTH_LONG).show();
 	}
 	
 }

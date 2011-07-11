@@ -6,4 +6,6 @@
     <item android:id="@+id/map_view"
           android:title="@string/map_view" 
           android:icon="@android:drawable/ic_menu_mapmode"/>
+    <item android:id="@+id/delete_all"
+          android:title="DEBUG - delete columns"/>
 </menu>

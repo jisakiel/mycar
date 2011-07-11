@@ -8,6 +8,8 @@
           android:title="@string/park" />
     <item android:id="@+id/edit_profile"
           android:title="@string/edit_profile" /> 
+    <item android:id="@+id/share_location"
+          android:title="@string/share_location" /> 
     <item android:id="@+id/remove"
           android:title="@string/remove" /> 
 </menu>

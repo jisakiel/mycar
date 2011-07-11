@@ -10,8 +10,9 @@ public class CarsDatabaseHelper extends SQLiteOpenHelper {
 
 	private static final String TAG = "CarsDatabaseHelper";
 	
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 		// V2: Latitude and longitude are REALs. Name not null.
+		// V3: Added 'resource_type' column.
 
     private static final String DATABASE_NAME = "cars.db";
     
@@ -31,7 +32,8 @@ public class CarsDatabaseHelper extends SQLiteOpenHelper {
 				Cars.LONGITUDE + " REAL, " +
 				Cars.ACCURACY + " REAL, " +
 				Cars.DATE + " INTEGER, " +
-				Cars.RESOURCE + " INTEGER, " +
+				Cars.RESOURCE_URL + " TEXT, " +
+				Cars.RESOURCE_TYPE + " INT, " +
 				Cars.MAC_ADDRESS + " TEXT" +
 			");");
 		

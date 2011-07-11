@@ -9,7 +9,7 @@
     <string name="unknown">unknown</string>
     
     <!--  Cars list options menu strings -->
-	<string name="new_profile">Create new car profile</string>
+	<string name="new_profile">Add car profile</string>
 	<string name="map_view">Map view</string>
 	
     <!--  Car context menu strings -->
@@ -17,5 +17,15 @@
 	<string name="directions">Take me to my car</string>
 	<string name="park">Park my car here</string>
 	<string name="edit_profile">Edit info</string>
+	<string name="share_location">Share location</string>
 	<string name="remove">Delete profile</string>
+	
+	<!-- Edit car strings -->
+	<string name="profile_name_hint">Profile name</string>
+	<string name="add_bluetooth">Connect bluetooth</string>
+	<string name="profile_icon">Car profile icon</string>
+	
+    <!--  Edit car options menu strings -->
+	<string name="save_profile">Save</string>
+	
 </resources>

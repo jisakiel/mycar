@@ -63,16 +63,35 @@ public class CarsInfo {
     	
     	/**
     	 * The identifier of the resource (color/image...) of the profile.
-    	 * <P>Type: INTEGET (int)</P>
+    	 * <P>Type: STRING (TEXT)</P>
     	 * TODO: a RESOURCE_TYPE column my be needed
     	 */
-    	public static final String RESOURCE = "resource";
+    	public static final String RESOURCE_URL = "resource";
+    	
+    	/**
+    	 * The identifier of the resource (color/image...) of the profile.
+    	 * <P>Type: INTEGET (int)</P>
+    	 * @see RESOURCE_TYPE
+    	 */
+    	public static final String RESOURCE_TYPE = "resource_type";
 
     	/**
     	 * The MAC address of the car bluetooth
     	 * <P>Type: TEXT</P>
     	 */
     	public static final String MAC_ADDRESS = "mac_address";
+    	
+    	
+    	
+    	/**
+    	 * Types of resource_type column
+    	 * <ul>
+    	 * 	<li>CARS_ICON: the resource is a Car icon included in the icon set of the app</li>
+    	 * 	<li>PERSONAL_ICON: the resource is an image/icon selected by the user</li>
+    	 * </ul>
+    	 *
+    	 */
+    	public enum RESOURCE_TYPE { CARS_ICON, PERSONAL_ICON };
     	
     	
     }
