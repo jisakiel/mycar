@@ -4,7 +4,6 @@ import java.util.Date;
 
 import net.insomniasoftware.mycar.provider.CarsInfo;
 import net.insomniasoftware.mycar.provider.CarsInfo.Cars;
-import net.insomniasoftware.mycar.provider.CarsInfo.Cars.RESOURCE_TYPE;
 import net.insomniasoftware.mycar.provider.CarsProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -61,17 +60,17 @@ public class CarsProviderTestCase extends ProviderTestCase2<CarsProvider> {
 	}
 	
 	private int insertCar(String name){
-		return insertCar(name, null, null, null);
+		return insertCar(name, Cars.RESOURCE_TYPE_CARS_ICON, null, null);
 	}
 	
-	private int insertCar(String name, RESOURCE_TYPE resource_type, String resource){
-		return insertCar(name, resource_type, resource, null);
+	private int insertCar(String name, int resourceType, String resource){
+		return insertCar(name, resourceType, resource, null);
 	}
 	
-	private int insertCar(String name, RESOURCE_TYPE resource_type, String resource, String mac){
+	private int insertCar(String name, int resourceType, String resource, String mac){
 		ContentValues values = new ContentValues();
 		values.put(Cars.NAME, name);
-		values.put(Cars.RESOURCE_TYPE, resource_type == null ? null : resource_type.ordinal());
+		values.put(Cars.RESOURCE_TYPE, resource);
 		values.put(Cars.RESOURCE_URL, resource);
 		values.put(Cars.MAC_ADDRESS, mac);
 		Uri uri = getMockContext().getContentResolver().insert(Cars.CONTENT_URI, values);
@@ -102,7 +101,7 @@ public class CarsProviderTestCase extends ProviderTestCase2<CarsProvider> {
 	public void testOneCar2(){
 		
 		// Insert
-		int id = insertCar(CAR_NAME_1, RESOURCE_TYPE.CARS_ICON, CAR_RESOURCE_1);
+		int id = insertCar(CAR_NAME_1, Cars.RESOURCE_TYPE_CARS_ICON, CAR_RESOURCE_1);
 		assertTrue(id > 0);
 		
 		// Query
@@ -113,7 +112,7 @@ public class CarsProviderTestCase extends ProviderTestCase2<CarsProvider> {
 		c.moveToNext();
 		assertEquals(c.getInt(c.getColumnIndex(Cars._ID)), id);
 		assertEquals(c.getString(c.getColumnIndex(Cars.NAME)), CAR_NAME_1);
-		assertEquals(c.getInt(c.getColumnIndex(Cars.RESOURCE_TYPE)), RESOURCE_TYPE.CARS_ICON.ordinal());
+		assertEquals(c.getInt(c.getColumnIndex(Cars.RESOURCE_TYPE)), Cars.RESOURCE_TYPE_CARS_ICON);
 		assertEquals(c.getString(c.getColumnIndex(Cars.RESOURCE_URL)), CAR_RESOURCE_1);
 		c.close();
 		
@@ -126,11 +125,11 @@ public class CarsProviderTestCase extends ProviderTestCase2<CarsProvider> {
 		
 		// Insert
 		int id;
-		id = insertCar(CAR_NAME_1, RESOURCE_TYPE.CARS_ICON, CAR_RESOURCE_1);
+		id = insertCar(CAR_NAME_1, Cars.RESOURCE_TYPE_CARS_ICON, CAR_RESOURCE_1);
 		assertTrue(id > 0);
-		id = insertCar(CAR_NAME_2, RESOURCE_TYPE.CARS_ICON, CAR_RESOURCE_2);
+		id = insertCar(CAR_NAME_2, Cars.RESOURCE_TYPE_CARS_ICON, CAR_RESOURCE_2);
 		assertTrue(id > 0);
-		id = insertCar(CAR_NAME_3, RESOURCE_TYPE.PERSONAL_ICON, CAR_RESOURCE_3);
+		id = insertCar(CAR_NAME_3, Cars.RESOURCE_TYPE_PERSONAL_ICON, CAR_RESOURCE_3);
 		assertTrue(id > 0);
 		
 		// Query
@@ -140,17 +139,17 @@ public class CarsProviderTestCase extends ProviderTestCase2<CarsProvider> {
 
 		c.moveToNext();
 		assertEquals(c.getString(c.getColumnIndex(Cars.NAME)), CAR_NAME_1);
-		assertEquals(c.getInt(c.getColumnIndex(Cars.RESOURCE_TYPE)), RESOURCE_TYPE.CARS_ICON.ordinal());
+		assertEquals(c.getInt(c.getColumnIndex(Cars.RESOURCE_TYPE)), Cars.RESOURCE_TYPE_CARS_ICON);
 		assertEquals(c.getString(c.getColumnIndex(Cars.RESOURCE_URL)), CAR_RESOURCE_1);
 		
 		c.moveToNext();
 		assertEquals(c.getString(c.getColumnIndex(Cars.NAME)), CAR_NAME_2);
-		assertEquals(c.getInt(c.getColumnIndex(Cars.RESOURCE_TYPE)), RESOURCE_TYPE.CARS_ICON.ordinal());
+		assertEquals(c.getInt(c.getColumnIndex(Cars.RESOURCE_TYPE)), Cars.RESOURCE_TYPE_CARS_ICON);
 		assertEquals(c.getString(c.getColumnIndex(Cars.RESOURCE_URL)), CAR_RESOURCE_2);
 		
 		c.moveToNext();
 		assertEquals(c.getString(c.getColumnIndex(Cars.NAME)), CAR_NAME_3);
-		assertEquals(c.getInt(c.getColumnIndex(Cars.RESOURCE_TYPE)), RESOURCE_TYPE.PERSONAL_ICON.ordinal());
+		assertEquals(c.getInt(c.getColumnIndex(Cars.RESOURCE_TYPE)), Cars.RESOURCE_TYPE_PERSONAL_ICON);
 		assertEquals(c.getString(c.getColumnIndex(Cars.RESOURCE_URL)), CAR_RESOURCE_3);
 		c.close();
 		
@@ -162,7 +161,7 @@ public class CarsProviderTestCase extends ProviderTestCase2<CarsProvider> {
 	public void testOneCarWithMacAddress(){
 		
 		// Insert
-		int id = insertCar(CAR_NAME_1, RESOURCE_TYPE.CARS_ICON, CAR_RESOURCE_1, CAR_MAC_ADDRESS_1);
+		int id = insertCar(CAR_NAME_1, Cars.RESOURCE_TYPE_CARS_ICON, CAR_RESOURCE_1, CAR_MAC_ADDRESS_1);
 		assertTrue(id > 0);
 		
 		// Query
@@ -174,7 +173,7 @@ public class CarsProviderTestCase extends ProviderTestCase2<CarsProvider> {
 		c.moveToNext();
 		assertEquals(c.getInt(c.getColumnIndex(Cars._ID)), id);
 		assertEquals(c.getString(c.getColumnIndex(Cars.NAME)), CAR_NAME_1);
-		assertEquals(c.getInt(c.getColumnIndex(Cars.RESOURCE_TYPE)), RESOURCE_TYPE.CARS_ICON.ordinal());
+		assertEquals(c.getInt(c.getColumnIndex(Cars.RESOURCE_TYPE)), Cars.RESOURCE_TYPE_CARS_ICON);
 		assertEquals(c.getString(c.getColumnIndex(Cars.RESOURCE_URL)), CAR_RESOURCE_1);
 		assertEquals(c.getString(c.getColumnIndex(Cars.MAC_ADDRESS)), CAR_MAC_ADDRESS_1);
 		c.close();
@@ -214,7 +213,7 @@ public class CarsProviderTestCase extends ProviderTestCase2<CarsProvider> {
 	
 	public void testInvalidResource1(){
 		try {
-			insertCar(CAR_NAME_1, RESOURCE_TYPE.PERSONAL_ICON, null);
+			insertCar(CAR_NAME_1, Cars.RESOURCE_TYPE_PERSONAL_ICON, null);
 			assertTrue(false);
 		} catch (Exception e) {
 			assertTrue(e instanceof IllegalArgumentException);
@@ -223,7 +222,7 @@ public class CarsProviderTestCase extends ProviderTestCase2<CarsProvider> {
 	
 	public void testInvalidResource2(){
 		try {
-			insertCar(CAR_NAME_1, RESOURCE_TYPE.PERSONAL_ICON, "");
+			insertCar(CAR_NAME_1, Cars.RESOURCE_TYPE_PERSONAL_ICON, "");
 			assertTrue(false);
 		} catch (Exception e) {
 			assertTrue(e instanceof IllegalArgumentException);
@@ -234,7 +233,7 @@ public class CarsProviderTestCase extends ProviderTestCase2<CarsProvider> {
 		try {
 			ContentValues values = new ContentValues();
 			values.put(Cars.NAME, CAR_NAME_1);
-			values.put(Cars.RESOURCE_TYPE, RESOURCE_TYPE.PERSONAL_ICON.ordinal());
+			values.put(Cars.RESOURCE_TYPE, Cars.RESOURCE_TYPE_PERSONAL_ICON);
 			getMockContext().getContentResolver().insert(Cars.CONTENT_URI, values);
 			assertTrue(false);
 		} catch (Exception e) {
@@ -245,7 +244,7 @@ public class CarsProviderTestCase extends ProviderTestCase2<CarsProvider> {
 	public void testUpdateLocation(){
 		
 		// Insert
-		int id = insertCar(CAR_NAME_1, RESOURCE_TYPE.CARS_ICON, CAR_RESOURCE_1, CAR_MAC_ADDRESS_1);
+		int id = insertCar(CAR_NAME_1, Cars.RESOURCE_TYPE_CARS_ICON, CAR_RESOURCE_1, CAR_MAC_ADDRESS_1);
 		assertTrue(id > 0);
 		
 		// Query
@@ -256,7 +255,7 @@ public class CarsProviderTestCase extends ProviderTestCase2<CarsProvider> {
 		c.moveToNext();
 		assertEquals(c.getInt(c.getColumnIndex(Cars._ID)), id);
 		assertEquals(c.getString(c.getColumnIndex(Cars.NAME)), CAR_NAME_1);
-		assertEquals(c.getInt(c.getColumnIndex(Cars.RESOURCE_TYPE)), RESOURCE_TYPE.CARS_ICON.ordinal());
+		assertEquals(c.getInt(c.getColumnIndex(Cars.RESOURCE_TYPE)), Cars.RESOURCE_TYPE_CARS_ICON);
 		assertEquals(c.getString(c.getColumnIndex(Cars.RESOURCE_URL)), CAR_RESOURCE_1);
 		assertNull(c.getString(c.getColumnIndex(Cars.LATITUDE)));
 		assertNull(c.getString(c.getColumnIndex(Cars.LONGITUDE)));

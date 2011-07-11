@@ -15,11 +15,12 @@
   		android:layout_gravity="center_vertical"
   		android:gravity="right">
   		
-  		<ImageView android:id="@+id/car"
+  		<ImageView android:id="@+id/car_icon"
         	android:layout_width="32dip"
         	android:layout_height="32dip"
         	android:paddingLeft="4dip"
-        	android:paddingRight="4dip"/>
+        	android:paddingRight="4dip"
+			android:scaleType="centerCrop"/>
 
 	</LinearLayout>
 

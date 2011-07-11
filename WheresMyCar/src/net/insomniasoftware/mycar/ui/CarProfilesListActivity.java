@@ -1,15 +1,20 @@
 package net.insomniasoftware.mycar.ui;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 
 import net.insomniasoftware.mycar.R;
 import net.insomniasoftware.mycar.provider.CarsInfo.Cars;
+import net.insomniasoftware.mycar.util.Utils;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -26,10 +31,12 @@ import android.widget.Toast;
 
 public class CarProfilesListActivity extends ListActivity {
 
+	private static final String TAG = "CarProfilesListActivity";
+
 	private CarProfilesListAdapter mAdapter;
-	
+
 	private static final int SUBACTIVITY_NEW_CAR = 1;
-	
+
 	/** Adapter class to fill in data for the car profiles data */
 	final class CarProfilesListAdapter extends ResourceCursorAdapter {
 
@@ -48,16 +55,39 @@ public class CarProfilesListActivity extends ListActivity {
 
 			mId = cursor.getInt(cursor.getColumnIndexOrThrow(Cars._ID));
 			mNameTextView = (TextView) v.findViewById(R.id.profile_name);
-			mCarIcon = (ImageView) v.findViewById(R.id.car);
+			mCarIcon = (ImageView) v.findViewById(R.id.car_icon);
 			mArrowIcon = (ImageView) v.findViewById(R.id.arrow);
 			mParkIcon = (ImageView) v.findViewById(R.id.park);
 
-			//fill up data from database
+			//Fill up data from database
+
+			//Name
 			mNameTextView.setText(cursor.getString(cursor.getColumnIndexOrThrow(Cars.NAME)));
 
-			int carIcon = cursor.getInt(cursor.getColumnIndexOrThrow(Cars.RESOURCE_URL));
-			mCarIcon.setImageDrawable(getResources().getDrawable(carIcon));
+			//Icon
+			int resourceType = cursor.getInt(cursor.getColumnIndexOrThrow(Cars.RESOURCE_TYPE));
+			String resourceUrl = cursor.getString(cursor.getColumnIndexOrThrow(Cars.RESOURCE_URL));
 
+			if (Utils.isEmpty(resourceUrl)){
+				//TODO 
+			}
+			switch (resourceType){
+			case Cars.RESOURCE_TYPE_CARS_ICON:
+				try {
+					BufferedInputStream buf = new BufferedInputStream(getAssets().open(resourceUrl));
+					Bitmap bitmap = BitmapFactory.decodeStream(buf);
+					mCarIcon.setImageBitmap(bitmap);
+					buf.close();
+				} catch (IOException e) {
+					Log.e(TAG, "Error showing icon", e);
+				}
+				break;
+			case Cars.RESOURCE_TYPE_PERSONAL_ICON:
+				mCarIcon.setImageURI(Uri.parse(resourceUrl));
+				break;
+			default:
+				Log.e(TAG, "Invalid resourceType " + resourceType);
+			}
 
 			//setup click listeners for specific actions
 			mArrowIcon.setOnClickListener(new OnClickListener() {
@@ -79,7 +109,7 @@ public class CarProfilesListActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		/*
 		//FIXME DEBUG DATA -- delete
 		ContentValues values = new ContentValues();
@@ -92,7 +122,7 @@ public class CarProfilesListActivity extends ListActivity {
 		values.put(Cars.RESOURCE, R.drawable.car);
 		getContentResolver().insert(Cars.CONTENT_URI, values);
 		//END DEBUG DATA
-		*/
+		 */
 
 		Cursor c = getContentResolver().query(Cars.CONTENT_URI, 
 				null, null, null, null);
@@ -131,10 +161,10 @@ public class CarProfilesListActivity extends ListActivity {
 		case R.id.park: 
 			park(info.id);
 			return true;
-		case R.id.arrow:
+		case R.id.directions:
 			navigate(info.id);
 			return true;
-		case R.id.car:
+		case R.id.show_car:
 			showCar(info.id);
 			return true;
 		case R.id.edit_profile:
@@ -204,9 +234,9 @@ public class CarProfilesListActivity extends ListActivity {
 	private void showCar(long id) {
 		Toast.makeText(CarProfilesListActivity.this, getString(R.string.show_car) + id, Toast.LENGTH_LONG).show();
 	}
-	
+
 	private void shareLocation(long id) {
 		Toast.makeText(CarProfilesListActivity.this, getString(R.string.share_location) + id, Toast.LENGTH_LONG).show();
 	}
-	
+
 }

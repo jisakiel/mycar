@@ -71,7 +71,7 @@ public class CarsInfo {
     	/**
     	 * The identifier of the resource (color/image...) of the profile.
     	 * <P>Type: INTEGET (int)</P>
-    	 * @see RESOURCE_TYPE
+    	 * @see ResourceType
     	 */
     	public static final String RESOURCE_TYPE = "resource_type";
 
@@ -91,9 +91,15 @@ public class CarsInfo {
     	 * </ul>
     	 *
     	 */
-    	public enum RESOURCE_TYPE { CARS_ICON, PERSONAL_ICON };
+    	public static final int RESOURCE_TYPE_CARS_ICON = 0;
+    	public static final int RESOURCE_TYPE_PERSONAL_ICON = 1;
     	
     	
     }
     
+    /**
+     * 
+     * Other constants
+     */
+    public static final String DEFAULT_CAR_ASSET = "car_icons/car.gif";
 }

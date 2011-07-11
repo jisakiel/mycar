@@ -3,9 +3,7 @@ package net.insomniasoftware.mycar.provider;
 import java.util.HashMap;
 
 import net.insomniasoftware.mycar.provider.CarsInfo.Cars;
-import net.insomniasoftware.mycar.provider.CarsInfo.Cars.RESOURCE_TYPE;
 import net.insomniasoftware.mycar.util.Utils;
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -112,17 +110,19 @@ public class CarsProvider extends ContentProvider {
 		if (!values.containsKey(Cars.NAME) || Utils.isEmpty(values.getAsString(Cars.NAME)))
 			throw new IllegalArgumentException("Car profile must have a name");
 		
-		// Resource_type (default value)
-		if (!values.containsKey(Cars.RESOURCE_TYPE) || Utils.isEmpty(values.getAsString(Cars.RESOURCE_TYPE))){
+		// Resource (default value)
+		if (!values.containsKey(Cars.RESOURCE_TYPE) || Utils.isEmpty(values.getAsString(Cars.RESOURCE_URL))){
 			//Default value
-			values.put(Cars.RESOURCE_TYPE, RESOURCE_TYPE.CARS_ICON.ordinal());
+			//TODO look for a not used icon instead of a default icon...
+			values.put(Cars.RESOURCE_TYPE, Cars.RESOURCE_TYPE_CARS_ICON);
+			values.put(Cars.RESOURCE_URL, CarsInfo.DEFAULT_CAR_ASSET);
 			Log.i(TAG, "Resource_type missed: inserting car profile with default icon");
 		}
 		
 		// if resource_type is personal_icon assert resource_url exists 
-		if (values.getAsInteger(Cars.RESOURCE_TYPE) == RESOURCE_TYPE.PERSONAL_ICON.ordinal()){
+		if (values.getAsInteger(Cars.RESOURCE_TYPE) == Cars.RESOURCE_TYPE_PERSONAL_ICON){
 			if (!values.containsKey(Cars.RESOURCE_URL) || Utils.isEmpty(values.getAsString(Cars.RESOURCE_URL)))
-				throw new IllegalArgumentException("A RESOURCE_URL is needed with RESOURCE_TYPE.PERSONAL_INFO");
+				throw new IllegalArgumentException("A RESOURCE_URL is needed with ResourceType.PERSONAL_INFO");
 		}
 		
 		long rowId = mCarsInserter.insert(values);
