@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<!--  Icons selecion options -->
+	<string-array name="icon_selection">
+		<item>Cars icons</item>
+		<item>Select photo from Gallery</item>
+	</string-array>
+
+</resources>

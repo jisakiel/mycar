@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/show_car"
+          android:title="@string/show_car" /> 
+    <item android:id="@+id/directions"
+          android:title="@string/directions" />
+    <item android:id="@+id/park"
+          android:title="@string/park" />
+    <item android:id="@+id/edit_profile"
+          android:title="@string/edit_profile" /> 
+    <item android:id="@+id/share_location"
+          android:title="@string/share_location" /> 
+    <item android:id="@+id/remove"
+          android:title="@string/remove" /> 
+</menu>

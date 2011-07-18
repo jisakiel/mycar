@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical">
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_marginLeft="5dip"
+		android:layout_marginRight="5dip"
+		android:layout_marginTop="5dip"
+		android:layout_marginBottom="5dip">
+	
+		<ImageView android:id="@+id/bt_add_icon"
+        	android:layout_width="64dip"
+        	android:layout_height="64dip"
+			android:focusable="false"
+			android:src="@drawable/add_car_icon"
+			android:scaleType="centerCrop"
+	        />	
+		
+		<EditText android:id="@+id/profile_name"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="10dip"
+			android:hint="@string/profile_name_hint" 
+			android:layout_gravity="bottom"/>
+
+	</LinearLayout>
+	
+	<ImageView 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:focusable="false"
+		android:src="@android:drawable/divider_horizontal_dim_dark"
+		android:layout_marginTop="10dip"
+		android:layout_marginBottom="10dip" />
+		
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_marginLeft="5dip"
+		android:layout_marginRight="5dip"
+		android:layout_marginTop="5dip"
+		android:layout_marginBottom="5dip">
+		
+		<ImageView android:id="@+id/bt_bluetooth"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:focusable="false"
+			android:src="@drawable/bluetooth"
+			/>
+		
+		<TextView android:id="@+id/add_bluetooth"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="10dip"
+			android:text="@string/add_bluetooth" 
+			android:layout_gravity="center_vertical"/>
+	
+	</LinearLayout>
+	
+	
+</LinearLayout>
+	
+	
