@@ -1,0 +1,16 @@
+.metadata/
+
+WheresMyCar/.classpath
+WheresMyCar/.project
+WheresMyCar/.settings/
+WheresMyCar/bin/
+WheresMyCar/default.properties
+WheresMyCar/gen/
+
+WheresMyCarTest/.classpath
+WheresMyCarTest/.project
+WheresMyCarTest/.settings/
+WheresMyCarTest/bin/
+WheresMyCarTest/default.properties
+WheresMyCarTest/gen/
+
